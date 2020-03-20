@@ -1,6 +1,6 @@
 import unittest
-from R0_Plus.core.common import *
-from R0_Plus.core.dataloader import DataLoader
+from MachineLarning_Numpy_CodeCraft2020.core.common import *
+from MachineLarning_Numpy_CodeCraft2020.core.dataloaders import DataLoader
 
 
 class MyTestCase(unittest.TestCase):

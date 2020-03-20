@@ -8,10 +8,10 @@ import os
 import re
 
 
-PACKAGE_NAME = "Numpy-ML-CodeCraft"
 ENCODING = "utf-8"
 
 PROJECT_DIR = os.path.dirname(os.path.dirname(__file__))
+PACKAGE_NAME = os.path.basename(PROJECT_DIR)
 
 RELEASE_DIR = os.path.join(PROJECT_DIR, "release")
 os.makedirs(RELEASE_DIR, exist_ok=True)
@@ -21,16 +21,21 @@ CORED_DIR = os.path.join(PROJECT_DIR, "core")
 ORDERED_CORE_PARTS = [
 	'common',
 	'functions',
-	'dataloader',
+	'dataloaders',
 	'models'
 ]
 
 
-def del_relative_import(file_path):
+def func_convert(file_path):
     with open(file_path, 'r', encoding=ENCODING) as f:
         s = f.read()
-        s = re.sub('from (?:Numpy-ML-CodeCraft)?\..*', '', s)
+
+        # 替换所有的相对导入
+        s = re.sub('from (?:{})?\..*'.format(PACKAGE_NAME), '', s)
+
+        # 消除些注释
         s = re.sub('#.*', '', s)
+
         return s
 
 
@@ -39,9 +44,9 @@ def convert_model(model_path, target_path=TARGET_MODEL_PATH):
 
     for core_part_name in ORDERED_CORE_PARTS:
         core_file_path = os.path.join(CORED_DIR, core_part_name+'.py')
-        text_converted += del_relative_import(core_file_path)
+        text_converted += func_convert(core_file_path)
 
-    text_converted += del_relative_import(model_path)
+    text_converted += func_convert(model_path)
 
     with open(target_path, "w", encoding=ENCODING) as f:
         f.write(text_converted)
@@ -49,5 +54,5 @@ def convert_model(model_path, target_path=TARGET_MODEL_PATH):
 
 
 if __name__ == '__main__':
-    model_path = os.path.join(RELEASE_DIR, "model_1_MBSGD.py")
+    model_path = "../demo/model_1_MBSGD.py"
     convert_model(model_path, target_path=TARGET_MODEL_PATH)

@@ -23,9 +23,10 @@ if "win" in sys.platform:
 	test_answer_path = os.path.join(data_dir, "answer.txt")
 	test_predict_path = os.path.join(data_dir, "result.txt")
 else:
+	data_dir = '/data'
 	train_data_path = "/data/train_data.txt"
 	test_data_path = "/data/test_data.txt"
-	test_answer_path = "/data/answer_data.txt"
+	test_answer_path = "/data/answer.txt"
 	test_predict_path = "/projects/student/result.txt"
 	
 	

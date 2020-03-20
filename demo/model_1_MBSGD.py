@@ -4,9 +4,9 @@
 # @Author       : Mark Shawn
 # @Email        : shawninjuly@gmail.com
 # ------------------------------------
-from R0_Plus.core.dataloader import DataLoader
-from R0_Plus.core.models import LogisticRegression
-from R0_Plus.core.common import *
+from MachineLarning_Numpy_CodeCraft2020.core.dataloaders import DataLoader
+from MachineLarning_Numpy_CodeCraft2020.core.models import LogisticRegression
+from MachineLarning_Numpy_CodeCraft2020.core.common import *
 
 import logging
 logging.basicConfig(level=logging.DEBUG, format="%(asctime)s [%(levelname)s] %(process)d %(name)s: %(message)s")
@@ -52,7 +52,6 @@ def main():
 	# 加载预测集
 	test_data_loader = DataLoader(use_mp=ENABLE_MULTI_PROCESSES)
 	test_data_loader.load_X(test_data_path)
-	test_data_loader.load_Y(test_answer_path)
 
 	# 模型预测
 	Y_pred = lr.predict(test_data_loader.X)
@@ -60,18 +59,27 @@ def main():
 
 	# 模型评估与持久化
 	if LOG_LEVEL <= logging.INFO:
-		test_result = lr.evaluate(Y_pred, test_data_loader.Y)
+		test_data_loader.load_Y(test_answer_path)
+		test_result = lr.evaluate_data_loader(test_data_loader)
 		logging.info("[TEST RESULT] err: [{}/{}], acc: {:.2f}%".format(*test_result.values()))
 		lr.dump_weight(WEIGHTS_PATH)
 
 
 
 if __name__ == '__main__':
+
+	# 根据平台控制程序的日志级别，设置成WARNIGN基本可以避免很多输出开销
+	LOG_LEVEL = logging.DEBUG if 'win' in sys.platform else logging.WARNING
+
+	# 是否启用多进程加载文件，在鲲鹏64核的帮助下此有奇效
 	ENABLE_MULTI_PROCESSES = True
+
 	SHUFFLE     = True      # 是否打乱训练数据顺序
+
+	WEIGHTS_PATH = os.path.join(data_dir, "w.pkl")
+
 	SPLIT_RATIO = 0.9       # 切割训练集与验证集比率
 	LOG_INTERVAL = 10
-	WEIGHTS_PATH = "w.pkl"
 	MAX_ITERATIONS = 100000 # 预期迭代次数计算公式： N_to_train / BS * Epochs
 	EPOCHS = 1
 
@@ -100,12 +108,12 @@ if __name__ == '__main__':
 	EPOCHS      = 20
 
 	"""
-	经测试比较好的结果是
+	大乱斗冠军参数（但线上并不够理想，在io、运算和算法上还有很大优化空间）
 	"""
 	LR = 0.01
 	BATCH_SIZE = 10
-	EPOCHS = 10
+	EPOCHS = 1
+	MAX_ITERATIONS = 4000  # 4000*10=4万，大概是线上一半的训练量
 
-	LOG_LEVEL = logging.INFO
 	main()
 

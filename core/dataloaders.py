@@ -14,12 +14,16 @@ from .common import lazy
 
 
 class DataLoader:
-	def __init__(self, use_mp=True, shuffle=False, batch_size=256, split_ratio=0.9):
+	def __init__(self, use_mp=True, shuffle=False, batch_size=256, split_ratio=0.9, seed=None):
 		self.use_mp = use_mp
 		self.shuffle = shuffle
 		self.batch_size = batch_size
+
 		self.split_ratio = split_ratio
 		assert 0 <= split_ratio <= 1, "训练集与验证集之间的切割比率要在0-1之间！"
+
+		self.seed = seed
+		np.random.seed(self.seed)
 
 	def _load_from_file(self, file_path, dtype=float):
 		assert os.path.exists(file_path), "目标文件不存在: {}".format(os.path.abspath(file_path))
@@ -87,7 +91,4 @@ class DataLoader:
 			      self.Y[self._train_slice[i: i + self.batch_size]]
 
 	def __len__(self):
-		import math
-		N_batches =  math.ceil(self.N_to_train / self.batch_size)
-		del math
-		return N_batches
+		return np.ceil(self.N_to_train / self.batch_size).astype(int).item()

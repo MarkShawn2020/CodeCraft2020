@@ -4,8 +4,9 @@
 # @Author       : Mark Shawn
 # @Email        : shawninjuly@gmail.com
 # ------------------------------------
-from R0_Plus.core import dataloader, models
-from R0_Plus.core.common import *
+from MachineLarning_Numpy_CodeCraft2020.core.dataloaders import DataLoader
+from MachineLarning_Numpy_CodeCraft2020.core.models import LogisticRegression
+from MachineLarning_Numpy_CodeCraft2020.core.common import *
 
 import logging
 logging.basicConfig(level=logging.DEBUG, format="%(asctime)s [%(levelname)s] %(process)d %(name)s: %(message)s")
@@ -42,7 +43,7 @@ def grid_test():
 	result = []
 	try:
 		for lr in np.logspace(-4, 0, 5):
-			model = models.LogisticRegression(lr=lr)
+			model = LogisticRegression(lr=lr)
 			for batch_size in np.logspace(0, 3, 4, dtype=int):
 				train_data_loader.batch_size = batch_size
 				for epochs in np.logspace(0, 4, 5, dtype=int):
@@ -77,13 +78,13 @@ if __name__ == '__main__':
 	WEIGHTS_PATH = "w.pkl"
 
 	# 加载训练集
-	train_data_loader = dataloader.DataLoader(
+	train_data_loader = DataLoader(
 		shuffle=SHUFFLE, use_mp=ENABLE_MULTI_PROCESSES,
 		batch_size=1, split_ratio=SPLIT_RATIO)
 	train_data_loader.load_XY(train_data_path)
 
 	# 加载预测集
-	test_data_loader = dataloader.DataLoader(use_mp=ENABLE_MULTI_PROCESSES)
+	test_data_loader = DataLoader(use_mp=ENABLE_MULTI_PROCESSES)
 	test_data_loader.load_X(test_data_path)
 	test_data_loader.load_Y(test_answer_path)
 
