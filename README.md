@@ -1,4 +1,4 @@
-# Numpy-ML-CodeCraft
+# MachineLarning_Numpy_CodeCraft2020
 
 ### 使用说明
 本项目部分参考`PYTORCH`的框架设计。
