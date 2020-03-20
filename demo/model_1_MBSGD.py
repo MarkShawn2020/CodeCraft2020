@@ -4,9 +4,13 @@
 # @Author       : Mark Shawn
 # @Email        : shawninjuly@gmail.com
 # ------------------------------------
-from MachineLarning_Numpy_CodeCraft2020.core.dataloaders import DataLoader
-from MachineLarning_Numpy_CodeCraft2020.core.models import LogisticRegression
-from MachineLarning_Numpy_CodeCraft2020.core.common import *
+
+import sys
+sys.path.insert(0, "../..")
+
+from core.dataloaders import DataLoader
+from core.models import LogisticRegression
+from core.common import *
 
 import logging
 logging.basicConfig(level=logging.DEBUG, format="%(asctime)s [%(levelname)s] %(process)d %(name)s: %(message)s")

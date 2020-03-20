@@ -5,10 +5,12 @@
 # @Email        : shawninjuly@gmail.com
 # ------------------------------------
 
+import sys
+sys.path.insert(0, "../..")
 
-from MachineLarning_Numpy_CodeCraft2020.core.common import *
-from MachineLarning_Numpy_CodeCraft2020.core.dataloaders import DataLoader
-from MachineLarning_Numpy_CodeCraft2020.core.models import LogisticRegression
+from core.dataloaders import DataLoader
+from core.models import LogisticRegression
+from core.common import *
 
 
 if __name__ == '__main__':

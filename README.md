@@ -2,38 +2,23 @@
 
 ### 使用说明
 #### 1. 导入项目
-我们默认您使用`PyCharm`软件，并且有一个本地项目`YOUR_PROJECT`
+```bash
+git clone https://github.com/MarkShawn2020/MachineLarning_Numpy_CodeCraft2020
+pip install numpy==1.17.2
+```
 
-在您的`YOUR_PROJECT`项目内，打开`terminal`，输入
-
-`git clone https://github.com/MarkShawn2020/MachineLarning_Numpy_CodeCraft2020`
-
-即可将本项目作为一个Package导入到您的项目内。
-
-当然了，如果您的项目本身已经是一个git项目，
-我们推荐您使用
-
-``git submodule add https://github.com/MarkShawn2020/MachineLarning_Numpy_CodeCraft2020``，
-
-两者都会在您的项目下生成一个`MachineLearning_Numpy_CodeCraft2020`文件夹，
-以下简称`MNC`。
 
 #### 2. 配置数据
-将华为官方的数据，即`train_data.txt`,`test_data.txt`,`answer.txt`，
-一起放入`MNC`文件夹下的`data`文件夹内，
+打开`core/settings.py`文件，设定您的数据文件夹位置。
+
 考虑到git的拉取速度，这些文件我们没有上传。
 
-此外，您的本地程序生成的预测文件`result.txt`也会自动存储在`data`文件夹下。
+此外，您的本地程序生成的预测文件`result.txt`也会自动存储在该文件夹下。
 
 #### 3. 测试程序
 RUN `demo/Model_1_MBSGD.py`，预期输出：
 
 ![demo_model_1](doc/run_demo_model_1.png)
-
-如果您想通过termina运行基于导入的项目，
-请在程序开头使用`import sys; sys.path.app....`
-此类项目路径设置，具体可以Google一下。
-或者参考我们发布程序，使用脚本替换。
 
 #### 4. 发布程序
 如果您的程序测试通过，
