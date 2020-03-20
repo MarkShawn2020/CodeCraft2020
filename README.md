@@ -1,7 +1,7 @@
 # MachineLarning_Numpy_CodeCraft2020
 
 ### 使用说明
-1. 导入项目
+#### 1. 导入项目
 我们默认您使用PyCharm软件，并且有一个本地项目YOUR_PROJECT
 
 在您的YOUR_PROJECT项目内，打开terminal，输入
@@ -14,14 +14,14 @@
 两者都会在您的项目下生成一个`MachineLearning_Numpy_CodeCraft2020`文件夹，
 以下简称`MNC`。
 
-2. 配置数据
+#### 2. 配置数据
 将华为官方的数据，即`train_data.txt`,`test_data.txt`,`answer.txt`，
 一起放入`MNC`文件夹下的`data`文件夹内，
 考虑到git的拉取速度，这些文件我们没有上传。
 
 此外，您的本地程序生成的预测文件`result.txt`也会自动存储在`data`文件夹下。
 
-3. 测试程序
+#### 3. 测试程序
 RUN `demo/Model_1_MBSGD.py`，预期输出：
 
 ![demo_model_1](doc/run_demo_model_1.png)
@@ -31,7 +31,7 @@ RUN `demo/Model_1_MBSGD.py`，预期输出：
 此类项目路径设置，具体可以Google一下。
 或者参考我们发布程序，使用脚本替换。
 
-4. 发布程序
+#### 4. 发布程序
 如果您的程序测试通过，
 可以使用`scripts/convert.py`文件将其自动转换成单文件版本，
 而无需您手动修改包的导入，这是本项目最大的福利之一。
