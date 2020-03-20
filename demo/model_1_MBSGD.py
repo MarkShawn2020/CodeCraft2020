@@ -35,12 +35,18 @@ def train(model, train_data_loader):
 
 
 @calc_time
+def load_train_data():
+	train_data_loader = DataLoader(
+		shuffle=SHUFFLE, use_mp=ENABLE_MULTI_PROCESSES, batch_size=BATCH_SIZE,
+		select_ratio=SELECT_RATIO, split_ratio=SPLIT_RATIO)
+	train_data_loader.load_XY(train_data_path)
+	return train_data_loader
+
+
+@calc_time
 def main():
 	# 加载训练集
-	train_data_loader = DataLoader(
-		shuffle=SHUFFLE, use_mp=ENABLE_MULTI_PROCESSES,
-		batch_size=BATCH_SIZE, split_ratio=SPLIT_RATIO)
-	train_data_loader.load_XY(train_data_path)
+	train_data_loader = load_train_data()
 
 	# 模型初始化
 	lr = LogisticRegression(lr=LR)
@@ -78,6 +84,7 @@ if __name__ == '__main__':
 
 	WEIGHTS_PATH = os.path.join(data_dir, "w.pkl")
 
+	SELECT_RATIO = 0.2
 	SPLIT_RATIO = 0.9       # 切割训练集与验证集比率
 	LOG_INTERVAL = 10
 	MAX_ITERATIONS = 100000 # 预期迭代次数计算公式： N_to_train / BS * Epochs
@@ -112,8 +119,8 @@ if __name__ == '__main__':
 	"""
 	LR = 0.01
 	BATCH_SIZE = 10
-	EPOCHS = 1
-	MAX_ITERATIONS = 4000  # 4000*10=4万，大概是线上一半的训练量
+	EPOCHS = 10
+
 
 	main()
 

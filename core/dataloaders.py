@@ -14,10 +14,14 @@ from .common import lazy
 
 
 class DataLoader:
-	def __init__(self, use_mp=True, shuffle=False, batch_size=256, split_ratio=0.9, seed=None):
+	def __init__(self, use_mp=True, shuffle=False, batch_size=256,
+	             select_ratio=1, split_ratio=0.9, seed=None):
 		self.use_mp = use_mp
 		self.shuffle = shuffle
 		self.batch_size = batch_size
+
+		self.select_ratio = select_ratio
+		assert 0 <= select_ratio <= 1, "训练集的选取比率要在0-1之间！"
 
 		self.split_ratio = split_ratio
 		assert 0 <= split_ratio <= 1, "训练集与验证集之间的切割比率要在0-1之间！"
@@ -28,7 +32,17 @@ class DataLoader:
 	def _load_from_file(self, file_path, dtype=float):
 		assert os.path.exists(file_path), "目标文件不存在: {}".format(os.path.abspath(file_path))
 		with open(file_path, "r") as fp:
-			lines = fp.readlines()
+			all_lines = fp.readlines()
+			N_lines_all = len(all_lines)
+			N_lines_selected = int(N_lines_all * self.select_ratio)
+			logging.info("Loaded lines [{}/{}] with SELECT_RATIO: {}".format(
+				N_lines_selected, N_lines_all, self.select_ratio))
+
+			if self.shuffle:
+				lines = random.sample(all_lines, N_lines_selected)
+			else:
+				lines = all_lines[: N_lines_selected]
+
 			if self.use_mp:
 				import multiprocessing as mp
 				with mp.Pool() as p:
@@ -68,27 +82,14 @@ class DataLoader:
 	def N_to_train(self):
 		return int(self.N_items * self.split_ratio)
 
-	@lazy
-	def _train_slice(self) -> list:
-		"""
-		使用数组的索引以操控shuffle
-		预期可以比直接shuffle训练数据效率更高
-
-		:return: 返回一个索引列表，该列表不包含验证集部分
-		"""
-		idx = list(range(self.N_items))
-		if self.shuffle:
-			random.shuffle(idx)
-		return idx[: self.N_to_train]
-
 	@staticmethod
 	def _load_line(line, delimiter=",", dtype=float):
 		return np.array(line.split(delimiter), dtype=dtype)
 
 	def __iter__(self):
 		for i in range(0, self.N_to_train, self.batch_size):
-			yield self.X[self._train_slice[i: i + self.batch_size]], \
-			      self.Y[self._train_slice[i: i + self.batch_size]]
+			yield self.X[i: i + self.batch_size], \
+			      self.Y[i: i + self.batch_size]
 
 	def __len__(self):
 		return np.ceil(self.N_to_train / self.batch_size).astype(int).item()
