@@ -62,8 +62,8 @@ class LogisticRegression(Model):
 			"loss": loss_cross_entropy,
 		}
 
-	def init_weight(self, n_features):
-		self.w = np.zeros((n_features, ))
+	def init_weight(self, n_features, scale=0.01):
+		self.w = np.random.random((n_features, )) * scale
 
 	def dump_weight(self, path):
 		pickle.dump(self.w, open(path, "wb"))

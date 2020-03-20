@@ -88,7 +88,7 @@ if __name__ == '__main__':
 
 	WEIGHTS_PATH = os.path.join(DATA_DIR, "w.pkl")
 
-	SELECT_RATIO = 0.2
+	SELECT_RATIO = 0.5
 	SPLIT_RATIO = 0.9       # 切割训练集与验证集比率
 	LOG_INTERVAL = 10
 	MAX_ITERATIONS = 100000 # 预期迭代次数计算公式： N_to_train / BS * Epochs
@@ -111,19 +111,19 @@ if __name__ == '__main__':
 	EPOCHS      = 5
 
 	"""
-	如果追求准确率，建议：LR<=0.03, BS>=500, EPOCHS>=300
-	可以得到较好的结果：[TEST RESULT] err: [302/2000], acc: 84.90%
-	"""
-	LR          = 0.03
-	BATCH_SIZE  = 100
-	EPOCHS      = 20
-
-	"""
 	大乱斗冠军参数（但线上并不够理想，在io、运算和算法上还有很大优化空间）
 	"""
 	LR = 0.01
 	BATCH_SIZE = 10
 	EPOCHS = 10
+
+	"""
+	如果追求准确率，建议：LR<=0.03, BS>=500, EPOCHS>=300
+	可以得到较好的结果：[TEST RESULT] err: [302/2000], acc: 84.90%
+	"""
+	LR          = 0.1
+	BATCH_SIZE  = 100
+	EPOCHS      = 1
 
 
 	main()

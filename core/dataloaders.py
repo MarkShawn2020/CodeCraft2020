@@ -5,6 +5,7 @@
 # @Email        : shawninjuly@gmail.com
 # ------------------------------------
 import os
+import mmap
 import logging
 import random
 import numpy as np
@@ -14,10 +15,12 @@ from .common import lazy
 
 
 class DataLoader:
-	def __init__(self, use_mp=True, shuffle=False, batch_size=256,
+	def __init__(self, use_mp=True, use_mmap=True, shuffle=False, standardize_x=True, batch_size=256,
 	             select_ratio=1, split_ratio=0.9, seed=None):
 		self.use_mp = use_mp
+		self.use_mmap = use_mmap
 		self.shuffle = shuffle
+		self.standardize_x = standardize_x
 		self.batch_size = batch_size
 
 		self.select_ratio = select_ratio
@@ -32,7 +35,15 @@ class DataLoader:
 	def _load_from_file(self, file_path, dtype=float):
 		assert os.path.exists(file_path), "目标文件不存在: {}".format(os.path.abspath(file_path))
 		with open(file_path, "r") as fp:
-			all_lines = fp.readlines()
+			if self.use_mmap:
+				m = mmap.mmap(fp.fileno(), 0, access=mmap.ACCESS_READ)
+				# 注意，由于mmap没有readlines方法，所以最后一行空行要去掉
+				all_lines = m.read().split(b'\n')[:-1]
+				func_load_line = self._load_line_bytes
+			else:
+				all_lines = fp.readlines()
+				func_load_line = self._load_line
+
 			N_lines_all = len(all_lines)
 			N_lines_selected = int(N_lines_all * self.select_ratio)
 			logging.info("Loaded lines [{}/{}] with SELECT_RATIO: {}".format(
@@ -46,14 +57,16 @@ class DataLoader:
 			if self.use_mp:
 				import multiprocessing as mp
 				with mp.Pool() as p:
-					data = np.array(p.map(partial(self._load_line, dtype=dtype), lines))
+					data = np.array(p.map(partial(func_load_line, dtype=dtype), lines))
 			else:
-				data = np.array(list(map(partial(self._load_line, dtype=dtype), lines)))
+				data = np.array(list(map(partial(func_load_line, dtype=dtype), lines)))
 		logging.info("Loaded data with shape {} from {}".format(data.shape, os.path.abspath(file_path)))
 		return data
 
 	def load_X(self, file_path):
 		self.X = self._load_from_file(file_path, dtype=float)
+		if self.standardize_x:
+			self.X = (self.X - self.X.mean(axis=0)) / self.X.std(axis=0)
 		self.N_items, self.N_features = self.X.shape
 
 	def load_Y(self, file_path):
@@ -62,6 +75,8 @@ class DataLoader:
 	def load_XY(self, file_path):
 		data = self._load_from_file(file_path, dtype=float)
 		self.X = data[:, :-1]
+		if self.standardize_x:
+			self.X = (self.X - self.X.mean(axis=0)) / self.X.std(axis=0)
 		self.N_items, self.N_features = self.X.shape
 		self.Y = data[:, -1].astype(int)
 
@@ -84,6 +99,10 @@ class DataLoader:
 
 	@staticmethod
 	def _load_line(line, delimiter=",", dtype=float):
+		return np.array(line.split(delimiter), dtype=dtype)
+
+	@staticmethod
+	def _load_line_bytes(line, delimiter=b",", dtype=float):
 		return np.array(line.split(delimiter), dtype=dtype)
 
 	def __iter__(self):

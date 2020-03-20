@@ -17,6 +17,8 @@ class lazy:
 
 import os, sys
 if "win" in sys.platform:
+	if not os.path.exists(DATA_DIR):
+		raise NotImplementedError("未找到您的数据文件夹: {}".format(os.path.abspath(DATA_DIR)))
 	train_data_path = os.path.join(DATA_DIR, "train_data.txt")
 	test_data_path = os.path.join(DATA_DIR, "test_data.txt")
 	test_answer_path = os.path.join(DATA_DIR, "answer.txt")
@@ -35,5 +37,5 @@ def calc_time(func):
 		result = func(*args, **kwargs)
 		dt = time.time() - st
 		print("Func: {}, Time: {}".format(func.__name__, dt))
-		return result if result else dt
+		return result if result is not None else dt
 	return wrapper

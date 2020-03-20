@@ -19,6 +19,7 @@ TARGET_MODEL_PATH = os.path.join(RELEASE_DIR, "Main.py")
 
 CORED_DIR = os.path.join(PROJECT_DIR, "core")
 ORDERED_CORE_PARTS = [
+	'settings',
 	'common',
 	'functions',
 	'dataloaders',
@@ -31,7 +32,7 @@ def func_convert(file_path):
         s = f.read()
 
         # 替换所有的相对导入
-        s = re.sub('from (?:{})?\..*'.format(PACKAGE_NAME), '', s)
+        s = re.sub('from (?:core)?\..*', '', s)
 
         # 消除些注释
         s = re.sub('#.*', '', s)
