@@ -2,15 +2,19 @@
 
 ### 使用说明
 #### 1. 导入项目
-我们默认您使用PyCharm软件，并且有一个本地项目YOUR_PROJECT
+我们默认您使用`PyCharm`软件，并且有一个本地项目`YOUR_PROJECT`
 
-在您的YOUR_PROJECT项目内，打开terminal，输入
+在您的`YOUR_PROJECT`项目内，打开`terminal`，输入
+
 `git clone https://github.com/MarkShawn2020/MachineLarning_Numpy_CodeCraft2020`
+
 即可将本项目作为一个Package导入到您的项目内。
 
 当然了，如果您的项目本身已经是一个git项目，
 我们推荐您使用
+
 ``git submodule add https://github.com/MarkShawn2020/MachineLarning_Numpy_CodeCraft2020``，
+
 两者都会在您的项目下生成一个`MachineLearning_Numpy_CodeCraft2020`文件夹，
 以下简称`MNC`。
 
