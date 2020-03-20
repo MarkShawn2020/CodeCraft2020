@@ -4,7 +4,7 @@
 # @Author	   : Mark Shawn
 # @Email		: shawninjuly@gmail.com
 # ------------------------------------
-
+from .settings import DATA_DIR
 
 class lazy:
 	def __init__(self, func):
@@ -17,13 +17,11 @@ class lazy:
 
 import os, sys
 if "win" in sys.platform:
-	data_dir = os.path.join(__file__, "../../data")
-	train_data_path = os.path.join(data_dir, "train_data.txt")
-	test_data_path = os.path.join(data_dir, "test_data.txt")
-	test_answer_path = os.path.join(data_dir, "answer.txt")
-	test_predict_path = os.path.join(data_dir, "result.txt")
+	train_data_path = os.path.join(DATA_DIR, "train_data.txt")
+	test_data_path = os.path.join(DATA_DIR, "test_data.txt")
+	test_answer_path = os.path.join(DATA_DIR, "answer.txt")
+	test_predict_path = os.path.join(DATA_DIR, "result.txt")
 else:
-	data_dir = '/data'
 	train_data_path = "/data/train_data.txt"
 	test_data_path = "/data/test_data.txt"
 	test_answer_path = "/data/answer.txt"

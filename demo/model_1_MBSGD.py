@@ -82,7 +82,7 @@ if __name__ == '__main__':
 
 	SHUFFLE     = True      # 是否打乱训练数据顺序
 
-	WEIGHTS_PATH = os.path.join(data_dir, "w.pkl")
+	WEIGHTS_PATH = os.path.join(DATA_DIR, "w.pkl")
 
 	SELECT_RATIO = 0.2
 	SPLIT_RATIO = 0.9       # 切割训练集与验证集比率
